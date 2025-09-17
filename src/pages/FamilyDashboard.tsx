@@ -552,18 +552,15 @@ export default function FamilyDashboard() {
                 )}
 
                 {/* Action Buttons */}
-                <div className="flex gap-2 pt-2">
-                  <Button size="sm" variant="outline" className="flex-1" onClick={() => handleVideoCall(member)}>
-                    <Phone className="h-3 w-3 mr-1" />
-                    Call
+                <div className="flex gap-1 pt-2">
+                  <Button size="sm" variant="outline" className="flex-1 text-xs px-2" onClick={() => handleVideoCall(member)}>
+                    <Phone className="h-3 w-3" />
                   </Button>
-                  <Button size="sm" variant="outline" className="flex-1">
-                    <MessageCircle className="h-3 w-3 mr-1" />
-                    Message
+                  <Button size="sm" variant="outline" className="flex-1 text-xs px-2">
+                    <MessageCircle className="h-3 w-3" />
                   </Button>
-                  <Button size="sm" variant="outline" className="flex-1">
-                    <Calendar className="h-3 w-3 mr-1" />
-                    Schedule
+                  <Button size="sm" variant="outline" className="flex-1 text-xs px-2">
+                    <Calendar className="h-3 w-3" />
                   </Button>
                 </div>
               </CardContent>

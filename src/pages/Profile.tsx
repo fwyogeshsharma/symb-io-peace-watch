@@ -385,6 +385,15 @@ export default function Profile() {
                   <FileText className="w-4 h-4 mr-2" />
                   Medical Records
                 </Button>
+
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => navigate('/reports')}
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Health Reports
+                </Button>
               </CardContent>
             </Card>
 
