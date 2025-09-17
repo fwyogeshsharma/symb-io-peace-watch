@@ -24,7 +24,7 @@ const typeConfig = {
     container: 'border-health-critical bg-gradient-alert text-white shadow-alert',
     badge: 'bg-white/20 text-white border-white/30',
     icon: 'text-white',
-    button: 'text-white border-white/30 hover:bg-white/10'
+    button: 'bg-white/10 text-white border-white/30 hover:bg-white/20'
   },
   warning: {
     container: 'border-health-warning bg-gradient-to-r from-warning/10 to-warning/5 text-foreground',
@@ -36,7 +36,7 @@ const typeConfig = {
     container: 'border-primary bg-gradient-primary text-white',
     badge: 'bg-white/20 text-white border-white/30',
     icon: 'text-white',
-    button: 'text-white border-white/30 hover:bg-white/10'
+    button: 'bg-white/10 text-white border-white/30 hover:bg-white/20'
   }
 }
 
@@ -91,8 +91,7 @@ export function AlertBanner({
                   onClick={action.onClick}
                   className={cn(
                     "text-xs h-8",
-                    type === 'critical' && config.button,
-                    type === 'info' && config.button
+                    (type === 'critical' || type === 'info') && config.button
                   )}
                 >
                   {action.label}

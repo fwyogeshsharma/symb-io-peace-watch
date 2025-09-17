@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react"
 import { DashboardHeader } from "@/components/layout/dashboard-header"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { toast } from "sonner"
 import { HealthMetricCard } from "@/components/ui/health-metric-card"
 import { AlertBanner } from "@/components/ui/alert-banner"
 import { HealthChart } from "@/components/charts/health-chart"
 import { ActivityTimeline } from "@/components/dashboard/activity-timeline"
+import { MultiPatientChart } from "@/components/charts/multi-patient-chart"
+import { LiveMonitoringGrid } from "@/components/charts/live-monitoring-grid"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -17,7 +21,13 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
-  Smartphone
+  Smartphone,
+  Shield,
+  Users,
+  Send,
+  Phone,
+  Mail,
+  MessageSquare
 } from "lucide-react"
 import dashboardHero from "@/assets/dashboard-hero.jpg"
 import elderlyHome from "@/assets/elderly-home.jpg"
@@ -26,6 +36,95 @@ export default function Dashboard() {
   const [userType] = useState<'patient' | 'caregiver'>('patient')
   const [connectionStatus] = useState<'connected' | 'disconnected' | 'syncing'>('connected')
   const [notifications] = useState(2)
+
+  // Alert notification state
+  const [showNotificationPopup, setShowNotificationPopup] = useState(false)
+  const [notificationMessage, setNotificationMessage] = useState("")
+
+  // Function to handle medication actions
+  const handleMedicationTaken = () => {
+    setNotificationMessage("✅ Medication marked as taken. Caregiver has been notified.")
+    setShowNotificationPopup(true)
+    toast.success("Medication recorded successfully!", {
+      description: "Your caregiver and healthcare team have been notified.",
+      duration: 4000
+    })
+
+    // Hide popup after 3 seconds
+    setTimeout(() => {
+      setShowNotificationPopup(false)
+    }, 3000)
+  }
+
+  const handleSnoozeReminder = () => {
+    setNotificationMessage("⏰ Reminder snoozed for 10 minutes. We'll remind you again soon.")
+    setShowNotificationPopup(true)
+    toast.info("Reminder snoozed", {
+      description: "You'll receive another reminder in 10 minutes.",
+      duration: 3000
+    })
+
+    // Hide popup after 3 seconds
+    setTimeout(() => {
+      setShowNotificationPopup(false)
+    }, 3000)
+  }
+
+  // Live heart rate data for multiple patients
+  const [liveHeartRateData, setLiveHeartRateData] = useState([
+    {
+      id: 'margaret',
+      name: 'Margaret Johnson',
+      avatar: 'MJ',
+      color: 'hsl(var(--health-good))',
+      currentRate: 72,
+      data: [65, 68, 72, 75, 70, 67, 72, 74, 71, 73, 75, 72]
+    },
+    {
+      id: 'robert',
+      name: 'Robert Johnson Sr.',
+      avatar: 'RJ',
+      color: 'hsl(var(--warning))',
+      currentRate: 78,
+      data: [78, 82, 85, 79, 88, 84, 86, 89, 83, 87, 85, 78]
+    },
+    {
+      id: 'dorothy',
+      name: 'Dorothy Williams',
+      avatar: 'DW',
+      color: 'hsl(var(--health-excellent))',
+      currentRate: 68,
+      data: [68, 70, 67, 69, 71, 68, 70, 69, 67, 70, 68, 68]
+    },
+    {
+      id: 'frank',
+      name: 'Frank Rodriguez',
+      avatar: 'FR',
+      color: 'hsl(var(--health-critical))',
+      currentRate: 65,
+      data: [65, 89, 92, 67, 95, 88, 91, 94, 69, 87, 85, 65]
+    }
+  ])
+
+  // Real-time updates for heart rate data
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLiveHeartRateData(prev => prev.map(patient => {
+        const newRate = patient.id === 'margaret' ? 70 + Math.random() * 8 :
+                       patient.id === 'robert' ? 75 + Math.random() * 15 :
+                       patient.id === 'dorothy' ? 66 + Math.random() * 6 :
+                       patient.id === 'frank' ? 60 + Math.random() * 35 : 70
+
+        return {
+          ...patient,
+          currentRate: Math.round(newRate),
+          data: [...patient.data.slice(1), Math.round(newRate)]
+        }
+      }))
+    }, 3000) // Update every 3 seconds
+
+    return () => clearInterval(interval)
+  }, [])
 
   // Sample data
   const healthMetrics = [
@@ -181,8 +280,8 @@ export default function Dashboard() {
             description="Time to take your evening blood pressure medication"
             timestamp="Due in 30 minutes"
             actions={[
-              { label: "Mark as Taken", onClick: () => console.log("Marked as taken") },
-              { label: "Snooze 10min", onClick: () => console.log("Snoozed"), variant: "secondary" }
+              { label: "Mark as Taken", onClick: handleMedicationTaken },
+              { label: "Snooze 10min", onClick: handleSnoozeReminder, variant: "secondary" }
             ]}
           />
         )}
@@ -194,18 +293,216 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* Charts and Timeline */}
+        {/* Interactive Multi-Patient Analytics */}
+        <MultiPatientChart />
+
+        {/* Live Patient Monitoring Grid */}
+        <LiveMonitoringGrid />
+
+        {/* Individual Patient Charts and Timeline */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <HealthChart
-              title="Heart Rate Trend"
-              description="Today's heart rate monitoring"
-              data={heartRateData}
-              type="area"
-              color="hsl(var(--health-good))"
-              unit=" BPM"
-            />
-            
+            {/* Live Heart Rate Chart */}
+            <Card className="shadow-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Heart className="h-5 w-5 text-health-critical" />
+                  Live Heart Rate Monitoring
+                  <Badge variant="outline" className="bg-primary/10 text-primary animate-pulse">
+                    Live Data
+                  </Badge>
+                </CardTitle>
+                <CardDescription>
+                  Real-time heart rate tracking for all monitored patients
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {/* Current Values Display */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {liveHeartRateData.map((patient) => (
+                      <div key={patient.id} className="text-center p-3 border border-border/50 rounded-lg">
+                        <div className="flex items-center gap-2 justify-center mb-2">
+                          <div
+                            className="w-3 h-3 rounded-full"
+                            style={{ backgroundColor: patient.color }}
+                          />
+                          <span className="text-xs font-medium">{patient.avatar}</span>
+                        </div>
+                        <p className="text-2xl font-bold" style={{ color: patient.color }}>
+                          {patient.currentRate}
+                        </p>
+                        <p className="text-xs text-muted-foreground">BPM</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Live Chart */}
+                  <div className="h-64 relative">
+                    <svg className="w-full h-full" viewBox="0 0 800 200">
+                      {/* Grid lines */}
+                      {Array.from({ length: 5 }, (_, i) => (
+                        <line
+                          key={`grid-${i}`}
+                          x1="0"
+                          y1={40 + i * 30}
+                          x2="800"
+                          y2={40 + i * 30}
+                          stroke="hsl(var(--border))"
+                          strokeWidth="0.5"
+                          opacity="0.3"
+                        />
+                      ))}
+
+                      {/* Y-axis labels */}
+                      {Array.from({ length: 5 }, (_, i) => (
+                        <text
+                          key={`y-label-${i}`}
+                          x="10"
+                          y={45 + i * 30}
+                          fontSize="10"
+                          fill="hsl(var(--muted-foreground))"
+                          textAnchor="start"
+                        >
+                          {120 - i * 20}
+                        </text>
+                      ))}
+
+                      {/* Patient heart rate lines */}
+                      {liveHeartRateData.map((patient, patientIndex) => {
+                        const points = patient.data.map((value, index) => {
+                          const x = 50 + (index * (750 / 11))
+                          const y = 160 - ((value - 40) / 80) * 120
+                          return `${x},${Math.max(40, Math.min(160, y))}`
+                        }).join(' ')
+
+                        return (
+                          <g key={patient.id}>
+                            {/* Line path */}
+                            <polyline
+                              points={points}
+                              fill="none"
+                              stroke={patient.color}
+                              strokeWidth="2"
+                              className="transition-all duration-300"
+                              style={{ opacity: 0.8 }}
+                            />
+
+                            {/* Data points */}
+                            {patient.data.map((value, index) => {
+                              const x = 50 + (index * (750 / 11))
+                              const y = 160 - ((value - 40) / 80) * 120
+                              const isLatest = index === patient.data.length - 1
+
+                              return (
+                                <circle
+                                  key={`${patient.id}-point-${index}`}
+                                  cx={x}
+                                  cy={Math.max(40, Math.min(160, y))}
+                                  r={isLatest ? "4" : "2"}
+                                  fill={patient.color}
+                                  className={`transition-all duration-300 ${isLatest ? 'animate-pulse' : ''}`}
+                                  style={{ opacity: isLatest ? 1 : 0.7 }}
+                                >
+                                  <title>{`${patient.name}: ${value} BPM at ${index < 6 ? `${6-index}h ago` : `${index-6}h ago`}`}</title>
+                                </circle>
+                              )
+                            })}
+
+                            {/* Patient label on the right */}
+                            <text
+                              x="760"
+                              y={160 - ((patient.currentRate - 40) / 80) * 120}
+                              fontSize="10"
+                              fill={patient.color}
+                              textAnchor="start"
+                              className="font-medium"
+                            >
+                              {patient.avatar} - {patient.currentRate}
+                            </text>
+                          </g>
+                        )
+                      })}
+
+                      {/* X-axis labels */}
+                      {Array.from({ length: 12 }, (_, timeIndex) => (
+                        <text
+                          key={`x-label-${timeIndex}`}
+                          x={50 + (timeIndex * (750 / 11))}
+                          y="185"
+                          fontSize="10"
+                          fill="hsl(var(--muted-foreground))"
+                          textAnchor="middle"
+                        >
+                          {timeIndex < 6 ? `${6-timeIndex}h` : `${timeIndex-6}h`}
+                        </text>
+                      ))}
+                    </svg>
+                  </div>
+
+                  {/* Legend */}
+                  <div className="flex flex-wrap gap-4 justify-center">
+                    {liveHeartRateData.map((patient) => (
+                      <div key={patient.id} className="flex items-center gap-2">
+                        <div
+                          className="w-3 h-3 rounded"
+                          style={{ backgroundColor: patient.color }}
+                        />
+                        <span className="text-sm font-medium">{patient.name}</span>
+                        <Badge
+                          variant="outline"
+                          className="text-xs"
+                          style={{
+                            borderColor: patient.color,
+                            color: patient.color
+                          }}
+                        >
+                          {patient.currentRate} BPM
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Alert Status */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-sm">Alert Status</h4>
+                      {liveHeartRateData.map((patient) => {
+                        const isAbnormal = patient.currentRate > 100 || patient.currentRate < 60
+                        const isCritical = patient.currentRate > 120 || patient.currentRate < 50
+
+                        return (
+                          <div key={patient.id} className="flex items-center justify-between text-xs">
+                            <span>{patient.name}</span>
+                            <Badge variant={isCritical ? "destructive" : isAbnormal ? "default" : "outline"}>
+                              {isCritical ? "Critical" : isAbnormal ? "Warning" : "Normal"}
+                            </Badge>
+                          </div>
+                        )
+                      })}
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-sm">Live Updates</h4>
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-health-good animate-pulse" />
+                          <span>Data refreshing every 3 seconds</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-3 h-3 text-health-good" />
+                          <span>All devices connected</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Shield className="w-3 h-3 text-primary" />
+                          <span>HIPAA compliant monitoring</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <HealthChart
               title="Daily Activity"
               description="Activity levels throughout the day"
@@ -220,6 +517,55 @@ export default function Dashboard() {
             <ActivityTimeline events={timelineEvents} />
           </div>
         </div>
+
+        {/* Feature Showcase - Navigation to Advanced Features */}
+        <Card className="shadow-card border-l-4 border-l-primary">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-primary" />
+              SymbIOT Platform Features
+            </CardTitle>
+            <CardDescription>
+              Explore our comprehensive healthcare monitoring ecosystem
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Button
+                variant="outline"
+                className="h-16 flex-col gap-2"
+                onClick={() => window.location.href = '/analytics'}
+              >
+                <Activity className="w-6 h-6 text-primary" />
+                <span className="text-sm">AI Analytics</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="h-16 flex-col gap-2"
+                onClick={() => window.location.href = '/family-dashboard'}
+              >
+                <Users className="w-6 h-6 text-health-good" />
+                <span className="text-sm">Family Dashboard</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="h-16 flex-col gap-2"
+                onClick={() => window.location.href = '/emergency'}
+              >
+                <AlertTriangle className="w-6 h-6 text-health-critical" />
+                <span className="text-sm">Emergency Center</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="h-16 flex-col gap-2"
+                onClick={() => window.location.href = '/provider-portal'}
+              >
+                <Shield className="w-6 h-6 text-success" />
+                <span className="text-sm">Provider Portal</span>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Quick Actions */}
         <Card className="shadow-card">
@@ -249,6 +595,54 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </main>
+
+      {/* Notification Popup Modal */}
+      <Dialog open={showNotificationPopup} onOpenChange={setShowNotificationPopup}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <CheckCircle className="h-5 w-5 text-health-good" />
+              Action Completed
+            </DialogTitle>
+            <DialogDescription>
+              Your action has been recorded and relevant parties have been notified.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex items-center space-x-2">
+            <div className="grid flex-1 gap-2">
+              <p className="text-sm font-medium text-center p-4 bg-health-good/10 rounded-lg border border-health-good/20">
+                {notificationMessage}
+              </p>
+              <div className="text-xs text-muted-foreground text-center space-y-1">
+                <div className="flex items-center justify-center gap-2">
+                  <Send className="h-3 w-3" />
+                  <span>Notifications sent to:</span>
+                </div>
+                <div className="flex items-center justify-center gap-4">
+                  <div className="flex items-center gap-1">
+                    <MessageSquare className="h-3 w-3" />
+                    <span>Family Members</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Mail className="h-3 w-3" />
+                    <span>Healthcare Team</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Phone className="h-3 w-3" />
+                    <span>Care Coordinator</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <Button onClick={() => setShowNotificationPopup(false)} className="w-full">
+              <CheckCircle className="h-4 w-4 mr-2" />
+              Got It
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -9,8 +9,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Bell, Settings, User, LogOut, Shield, Heart } from "lucide-react"
+import { Bell, Settings, User, LogOut, Shield, Heart, Video, Phone } from "lucide-react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { NotificationCenter, useNotifications } from "@/components/notifications/notification-center"
+import { VideoCallModal } from "@/components/video/video-call-modal"
 
 interface DashboardHeaderProps {
   userType: 'patient' | 'caregiver'
@@ -20,7 +23,29 @@ interface DashboardHeaderProps {
 }
 
 export function DashboardHeader({ userType, userName, notifications = 0, connectionStatus }: DashboardHeaderProps) {
+  const navigate = useNavigate()
   const [showNotifications, setShowNotifications] = useState(false)
+  const [showVideoCall, setShowVideoCall] = useState(false)
+  const [selectedPatient, setSelectedPatient] = useState({
+    id: 'margaret',
+    name: 'Margaret Johnson',
+    avatar: 'MJ',
+    age: 78,
+    location: 'Living Room',
+    status: 'good' as const
+  })
+
+  const {
+    notifications: notificationList,
+    addNotification,
+    markAsRead,
+    markAllAsRead,
+    deleteNotification,
+    handleNotificationAction
+  } = useNotifications()
+
+  // Override the notifications count with actual notifications
+  const actualNotificationCount = notificationList.filter(n => !n.isRead).length
 
   const statusConfig = {
     connected: { color: 'bg-success', label: 'All systems online' },
@@ -60,20 +85,56 @@ export function DashboardHeader({ userType, userName, notifications = 0, connect
             )}
           </Badge>
 
+          {/* Video Call Button */}
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setShowVideoCall(true)}
+            title="Start Video Call"
+          >
+            <Video className="h-4 w-4" />
+          </Button>
+
+          {/* Emergency Call Button */}
+          <Button
+            variant="outline"
+            size="icon"
+            className="text-health-critical hover:bg-health-critical/10"
+            onClick={() => {
+              addNotification({
+                type: 'critical',
+                title: 'Emergency Call Initiated',
+                message: 'Emergency services contacted. Response team dispatched.',
+                patient: selectedPatient,
+                isRead: false,
+                isActionable: true,
+                actions: [
+                  { label: 'Cancel Call', type: 'destructive', onClick: () => console.log('Emergency call cancelled') },
+                  { label: 'Update Status', type: 'secondary', onClick: () => console.log('Status updated') }
+                ],
+                priority: 'high',
+                category: 'emergency'
+              })
+            }}
+            title="Emergency Call"
+          >
+            <Phone className="h-4 w-4" />
+          </Button>
+
           {/* Notifications */}
           <Button
             variant="outline"
             size="icon"
             className="relative"
-            onClick={() => setShowNotifications(!showNotifications)}
+            onClick={() => setShowNotifications(true)}
           >
             <Bell className="h-4 w-4" />
-            {notifications > 0 && (
-              <Badge 
-                variant="destructive" 
-                className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
+            {actualNotificationCount > 0 && (
+              <Badge
+                variant="destructive"
+                className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs animate-pulse"
               >
-                {notifications > 9 ? '9+' : notifications}
+                {actualNotificationCount > 9 ? '9+' : actualNotificationCount}
               </Badge>
             )}
           </Button>
@@ -100,11 +161,11 @@ export function DashboardHeader({ userType, userName, notifications = 0, connect
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/settings')}>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/profile')}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
@@ -117,6 +178,24 @@ export function DashboardHeader({ userType, userName, notifications = 0, connect
           </DropdownMenu>
         </div>
       </div>
+
+      {/* Notification Center Modal */}
+      <NotificationCenter
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
+        notifications={notificationList}
+        onNotificationAction={handleNotificationAction}
+        onMarkAsRead={markAsRead}
+        onMarkAllAsRead={markAllAsRead}
+        onDeleteNotification={deleteNotification}
+      />
+
+      {/* Video Call Modal */}
+      <VideoCallModal
+        isOpen={showVideoCall}
+        onClose={() => setShowVideoCall(false)}
+        patient={selectedPatient}
+      />
     </header>
   )
 }
