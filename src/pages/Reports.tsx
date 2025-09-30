@@ -57,6 +57,7 @@ export default function Reports() {
       relation: 'Mother',
       age: 78,
       avatar: 'MJ',
+      photo: '/images (2).jfif',
       status: 'good',
       recentReports: 8
     },
@@ -66,6 +67,7 @@ export default function Reports() {
       relation: 'Father',
       age: 82,
       avatar: 'RJ',
+      photo: '/images.jfif',
       status: 'warning',
       recentReports: 12
     },
@@ -75,6 +77,7 @@ export default function Reports() {
       relation: 'Grandmother',
       age: 75,
       avatar: 'DW',
+      photo: '/images (1).jfif',
       status: 'excellent',
       recentReports: 6
     },
@@ -84,6 +87,7 @@ export default function Reports() {
       relation: 'Uncle',
       age: 84,
       avatar: 'FR',
+      photo: '/download.jpg',
       status: 'critical',
       recentReports: 15
     }
@@ -400,12 +404,17 @@ export default function Reports() {
                     >
                       <CardContent className="p-4">
                         <div className="flex items-center gap-3">
-                          <Avatar className="h-10 w-10">
-                            <AvatarImage src={`/placeholder-${member.id}.jpg`} />
-                            <AvatarFallback className="bg-primary text-primary-foreground text-sm">
-                              {member.avatar}
-                            </AvatarFallback>
-                          </Avatar>
+                          <img
+                            src={member.photo}
+                            alt={member.name}
+                            className="h-10 w-10 rounded-full object-cover border-2"
+                            style={{
+                              borderColor: member.status === 'critical' ? 'hsl(var(--health-critical))' :
+                                          member.status === 'warning' ? 'hsl(var(--warning))' :
+                                          member.status === 'excellent' ? 'hsl(var(--health-excellent))' :
+                                          'hsl(var(--health-good))'
+                            }}
+                          />
                           <div className="flex-1">
                             <h3 className="font-semibold text-sm">{member.name}</h3>
                             <p className="text-xs text-muted-foreground">{member.relation}, {member.age}</p>

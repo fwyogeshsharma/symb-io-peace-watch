@@ -142,13 +142,12 @@ export function DashboardHeader({ userType, userName, notifications = 0, connect
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src="/placeholder-user.jpg" alt={userName} />
-                  <AvatarFallback className="bg-primary text-primary-foreground">
-                    {userName.split(' ').map(n => n[0]).join('').toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+              <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
+                <img
+                  src="/images (2).jfif"
+                  alt={userName}
+                  className="h-10 w-10 rounded-full object-cover border-2 border-primary"
+                />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>

@@ -336,14 +336,24 @@ export default function Profile() {
                 <CardTitle>Profile Picture</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col items-center space-y-4">
-                <Avatar className="h-24 w-24">
-                  <AvatarImage src="/placeholder-user.jpg" alt={`${profile.firstName} ${profile.lastName}`} />
-                  <AvatarFallback className="bg-primary text-primary-foreground text-lg">
-                    {profile.firstName[0]}{profile.lastName[0]}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="relative">
+                  <img
+                    src="/images (2).jfif"
+                    alt={`${profile.firstName} ${profile.lastName}`}
+                    className="h-32 w-32 rounded-full object-cover border-4 border-primary shadow-lg"
+                  />
+                  {isEditing && (
+                    <div className="absolute bottom-0 right-0 bg-primary rounded-full p-2 cursor-pointer hover:bg-primary/90 transition-colors">
+                      <Camera className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+                </div>
+                <div className="text-center">
+                  <h3 className="font-semibold text-lg">{profile.firstName} {profile.lastName}</h3>
+                  <p className="text-sm text-muted-foreground">{calculateAge(profile.dateOfBirth)} years old</p>
+                </div>
                 {isEditing && (
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="w-full">
                     <Camera className="w-4 h-4 mr-2" />
                     Change Photo
                   </Button>

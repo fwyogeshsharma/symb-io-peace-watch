@@ -26,6 +26,7 @@ interface PatientData {
   name: string
   age: number
   avatar: string
+  photo: string
   healthScore: number
   status: 'excellent' | 'good' | 'warning' | 'critical'
   vitals: {
@@ -56,6 +57,7 @@ export function MultiPatientChart() {
       name: 'Margaret Johnson',
       age: 78,
       avatar: 'MJ',
+      photo: '/images (2).jfif',
       healthScore: 87,
       status: 'good',
       vitals: {
@@ -74,6 +76,7 @@ export function MultiPatientChart() {
       name: 'Robert Chen',
       age: 82,
       avatar: 'RC',
+      photo: '/images.jfif',
       healthScore: 73,
       status: 'warning',
       vitals: {
@@ -91,6 +94,7 @@ export function MultiPatientChart() {
       name: 'Dorothy Williams',
       age: 75,
       avatar: 'DW',
+      photo: '/images (1).jfif',
       healthScore: 94,
       status: 'excellent',
       vitals: {
@@ -108,6 +112,7 @@ export function MultiPatientChart() {
       name: 'Frank Rodriguez',
       age: 84,
       avatar: 'FR',
+      photo: '/download.jpg',
       healthScore: 65,
       status: 'critical',
       vitals: {
@@ -341,9 +346,15 @@ export function MultiPatientChart() {
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold">
-                              {patient.avatar}
-                            </div>
+                            <img
+                              src={patient.photo}
+                              alt={patient.name}
+                              className="w-10 h-10 rounded-full object-cover border-2"
+                              style={{ borderColor: patient.status === 'critical' ? 'hsl(var(--health-critical))' :
+                                                    patient.status === 'warning' ? 'hsl(var(--warning))' :
+                                                    patient.status === 'excellent' ? 'hsl(var(--health-excellent))' :
+                                                    'hsl(var(--health-good))' }}
+                            />
                             <div>
                               <p className="font-medium text-sm">{patient.name}</p>
                               <p className="text-xs text-muted-foreground">Age {patient.age}</p>
@@ -493,9 +504,11 @@ export function MultiPatientChart() {
                       <div key={patient.id} className="space-y-2">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold">
-                              {patient.avatar}
-                            </div>
+                            <img
+                              src={patient.photo}
+                              alt={patient.name}
+                              className="w-6 h-6 rounded-full object-cover"
+                            />
                             <span className="text-sm font-medium">{patient.name}</span>
                           </div>
                           <div className="text-right">
@@ -532,9 +545,11 @@ export function MultiPatientChart() {
                   {patientsData.filter(p => p.alerts > 0).map((patient) => (
                     <div key={patient.id} className="flex items-center justify-between p-3 border border-border/50 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold">
-                          {patient.avatar}
-                        </div>
+                        <img
+                          src={patient.photo}
+                          alt={patient.name}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
                         <div>
                           <p className="font-medium">{patient.name}</p>
                           <p className="text-xs text-muted-foreground">Age {patient.age}</p>
@@ -583,9 +598,11 @@ export function MultiPatientChart() {
                     <div key={patient.id} className="space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold">
-                            {patient.avatar}
-                          </div>
+                          <img
+                            src={patient.photo}
+                            alt={patient.name}
+                            className="w-6 h-6 rounded-full object-cover"
+                          />
                           <span className="text-sm font-medium">{patient.name}</span>
                         </div>
                         <span className={`text-sm font-bold ${

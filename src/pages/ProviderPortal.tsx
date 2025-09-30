@@ -76,6 +76,7 @@ export default function ProviderPortal() {
       healthScore: 87,
       alerts: 0,
       avatar: 'MJ',
+      photo: '/images (2).jfif',
       recentMetrics: {
         heartRate: { current: 72, trend: 'stable', range: [68, 76] },
         bloodPressure: { current: '118/76', trend: 'improving', systolic: [115, 122], diastolic: [74, 78] },
@@ -97,6 +98,7 @@ export default function ProviderPortal() {
       healthScore: 73,
       alerts: 3,
       avatar: 'RJ',
+      photo: '/images.jfif',
       recentMetrics: {
         heartRate: { current: 78, trend: 'concerning', range: [75, 85] },
         bloodPressure: { current: '142/89', trend: 'worsening', systolic: [138, 145], diastolic: [86, 92] },
@@ -117,6 +119,7 @@ export default function ProviderPortal() {
       healthScore: 94,
       alerts: 0,
       avatar: 'DW',
+      photo: '/images (1).jfif',
       recentMetrics: {
         heartRate: { current: 68, trend: 'stable', range: [65, 72] },
         bloodPressure: { current: '115/72', trend: 'stable', systolic: [112, 118], diastolic: [70, 74] },
@@ -137,6 +140,7 @@ export default function ProviderPortal() {
       healthScore: 65,
       alerts: 5,
       avatar: 'FR',
+      photo: '/download.jpg',
       recentMetrics: {
         heartRate: { current: 65, trend: 'concerning', range: [60, 100] },
         bloodPressure: { current: '158/95', trend: 'worsening', systolic: [155, 162], diastolic: [93, 98] },
@@ -414,12 +418,17 @@ export default function ProviderPortal() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-4">
                         <div className="flex items-center gap-3">
-                          <Avatar className="h-16 w-16">
-                            <AvatarImage src={`/placeholder-${currentPatient.id}.jpg`} />
-                            <AvatarFallback className="bg-primary text-primary-foreground text-lg">
-                              {currentPatient.avatar}
-                            </AvatarFallback>
-                          </Avatar>
+                          <img
+                            src={currentPatient.photo}
+                            alt={currentPatient.name}
+                            className="h-16 w-16 rounded-full object-cover border-2"
+                            style={{
+                              borderColor: currentPatient.riskLevel === 'critical' ? 'hsl(var(--health-critical))' :
+                                          currentPatient.riskLevel === 'high' ? 'hsl(var(--warning))' :
+                                          currentPatient.riskLevel === 'medium' ? 'hsl(var(--primary))' :
+                                          'hsl(var(--health-good))'
+                            }}
+                          />
                           <div>
                             <h3 className="text-xl font-bold">{currentPatient.name}</h3>
                             <p className="text-muted-foreground">Age {currentPatient.age} • MRN: {currentPatient.mrn}</p>

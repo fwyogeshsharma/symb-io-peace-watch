@@ -56,7 +56,8 @@ export default function Emergency() {
       medications: ['Warfarin 5mg', 'Atorvastatin 40mg', 'Lisinopril 10mg'],
       allergies: ['Penicillin', 'Shellfish'],
       bloodType: 'A+',
-      avatar: 'RJ'
+      avatar: 'RJ',
+      photo: '/images.jfif'
     },
     trigger: {
       type: 'Fall Detection',
@@ -204,11 +205,11 @@ export default function Emergency() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
-                      <Avatar className="h-16 w-16">
-                        <AvatarFallback className="bg-health-critical text-white text-lg">
-                          {currentEmergency.patient.avatar}
-                        </AvatarFallback>
-                      </Avatar>
+                      <img
+                        src={currentEmergency.patient.photo}
+                        alt={currentEmergency.patient.name}
+                        className="h-16 w-16 rounded-full object-cover border-4 border-health-critical animate-pulse"
+                      />
                       <div>
                         <h3 className="text-xl font-bold">{currentEmergency.patient.name}</h3>
                         <p className="text-muted-foreground">Age {currentEmergency.patient.age}</p>

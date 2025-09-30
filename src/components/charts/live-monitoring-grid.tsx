@@ -28,6 +28,7 @@ interface LivePatientData {
   id: string
   name: string
   avatar: string
+  photo: string
   location: string
   lastSeen: string
   vitals: {
@@ -72,6 +73,7 @@ export function LiveMonitoringGrid() {
       id: 'margaret',
       name: 'Margaret Johnson',
       avatar: 'MJ',
+      photo: '/images (2).jfif',
       location: 'Living Room',
       lastSeen: 'Active now',
       vitals: {
@@ -99,6 +101,7 @@ export function LiveMonitoringGrid() {
       id: 'robert',
       name: 'Robert Chen',
       avatar: 'RC',
+      photo: '/images.jfif',
       location: 'Garden',
       lastSeen: '5 min ago',
       vitals: {
@@ -129,6 +132,7 @@ export function LiveMonitoringGrid() {
       id: 'dorothy',
       name: 'Dorothy Williams',
       avatar: 'DW',
+      photo: '/images (1).jfif',
       location: 'Bedroom',
       lastSeen: '1 min ago',
       vitals: {
@@ -156,6 +160,7 @@ export function LiveMonitoringGrid() {
       id: 'frank',
       name: 'Frank Rodriguez',
       avatar: 'FR',
+      photo: '/download.jpg',
       location: 'Kitchen',
       lastSeen: 'Active now',
       vitals: {
@@ -328,11 +333,17 @@ export function LiveMonitoringGrid() {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-12 w-12">
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      {patient.avatar}
-                    </AvatarFallback>
-                  </Avatar>
+                  <img
+                    src={patient.photo}
+                    alt={patient.name}
+                    className="h-12 w-12 rounded-full object-cover border-2"
+                    style={{
+                      borderColor: patient.status === 'critical' ? 'hsl(var(--health-critical))' :
+                                  patient.status === 'warning' ? 'hsl(var(--warning))' :
+                                  patient.status === 'excellent' ? 'hsl(var(--health-excellent))' :
+                                  'hsl(var(--health-good))'
+                    }}
+                  />
                   <div>
                     <h3 className="font-semibold text-lg">{patient.name}</h3>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">

@@ -76,6 +76,7 @@ export default function Dashboard() {
       id: 'margaret',
       name: 'Margaret Johnson',
       avatar: 'MJ',
+      photo: '/images (2).jfif',
       color: 'hsl(var(--health-good))',
       currentRate: 72,
       data: [65, 68, 72, 75, 70, 67, 72, 74, 71, 73, 75, 72]
@@ -84,6 +85,7 @@ export default function Dashboard() {
       id: 'robert',
       name: 'Robert Johnson Sr.',
       avatar: 'RJ',
+      photo: '/images.jfif',
       color: 'hsl(var(--warning))',
       currentRate: 78,
       data: [78, 82, 85, 79, 88, 84, 86, 89, 83, 87, 85, 78]
@@ -92,6 +94,7 @@ export default function Dashboard() {
       id: 'dorothy',
       name: 'Dorothy Williams',
       avatar: 'DW',
+      photo: '/images (1).jfif',
       color: 'hsl(var(--health-excellent))',
       currentRate: 68,
       data: [68, 70, 67, 69, 71, 68, 70, 69, 67, 70, 68, 68]
@@ -100,6 +103,7 @@ export default function Dashboard() {
       id: 'frank',
       name: 'Frank Rodriguez',
       avatar: 'FR',
+      photo: '/download.jpg',
       color: 'hsl(var(--health-critical))',
       currentRate: 65,
       data: [65, 89, 92, 67, 95, 88, 91, 94, 69, 87, 85, 65]
@@ -322,12 +326,14 @@ export default function Dashboard() {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {liveHeartRateData.map((patient) => (
                       <div key={patient.id} className="text-center p-3 border border-border/50 rounded-lg">
-                        <div className="flex items-center gap-2 justify-center mb-2">
-                          <div
-                            className="w-3 h-3 rounded-full"
-                            style={{ backgroundColor: patient.color }}
+                        <div className="flex flex-col items-center gap-2 mb-2">
+                          <img
+                            src={patient.photo}
+                            alt={patient.name}
+                            className="w-12 h-12 rounded-full object-cover border-2"
+                            style={{ borderColor: patient.color }}
                           />
-                          <span className="text-xs font-medium">{patient.avatar}</span>
+                          <span className="text-xs font-medium">{patient.name.split(' ')[0]}</span>
                         </div>
                         <p className="text-2xl font-bold" style={{ color: patient.color }}>
                           {patient.currentRate}
@@ -444,9 +450,11 @@ export default function Dashboard() {
                   <div className="flex flex-wrap gap-4 justify-center">
                     {liveHeartRateData.map((patient) => (
                       <div key={patient.id} className="flex items-center gap-2">
-                        <div
-                          className="w-3 h-3 rounded"
-                          style={{ backgroundColor: patient.color }}
+                        <img
+                          src={patient.photo}
+                          alt={patient.name}
+                          className="w-6 h-6 rounded-full object-cover border"
+                          style={{ borderColor: patient.color }}
                         />
                         <span className="text-sm font-medium">{patient.name}</span>
                         <Badge

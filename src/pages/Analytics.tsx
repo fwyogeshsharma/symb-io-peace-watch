@@ -48,7 +48,8 @@ export default function Analytics() {
       age: 78,
       condition: 'Hypertension, Diabetes',
       riskLevel: 'low',
-      avatar: 'MJ'
+      avatar: 'MJ',
+      photo: '/images (2).jfif'
     },
     {
       id: 'robert',
@@ -56,7 +57,8 @@ export default function Analytics() {
       age: 82,
       condition: 'Heart Disease, Arthritis',
       riskLevel: 'medium',
-      avatar: 'RC'
+      avatar: 'RC',
+      photo: '/images.jfif'
     },
     {
       id: 'dorothy',
@@ -64,7 +66,8 @@ export default function Analytics() {
       age: 75,
       condition: 'COPD, Osteoporosis',
       riskLevel: 'high',
-      avatar: 'DW'
+      avatar: 'DW',
+      photo: '/images (1).jfif'
     },
     {
       id: 'frank',
@@ -72,7 +75,8 @@ export default function Analytics() {
       age: 84,
       condition: 'Alzheimer\'s, Diabetes',
       riskLevel: 'high',
-      avatar: 'FR'
+      avatar: 'FR',
+      photo: '/download.jpg'
     }
   ]
 
@@ -345,9 +349,16 @@ export default function Analytics() {
                   <div key={patient.id} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold">
-                          {patient.avatar}
-                        </div>
+                        <img
+                          src={patient.photo}
+                          alt={patient.name}
+                          className="w-10 h-10 rounded-full object-cover border-2"
+                          style={{
+                            borderColor: patient.riskLevel === 'high' ? 'hsl(var(--health-critical))' :
+                                        patient.riskLevel === 'medium' ? 'hsl(var(--warning))' :
+                                        'hsl(var(--health-good))'
+                          }}
+                        />
                         <div>
                           <p className="font-medium text-sm">{patient.name}</p>
                           <p className="text-xs text-muted-foreground">Age {patient.age}</p>

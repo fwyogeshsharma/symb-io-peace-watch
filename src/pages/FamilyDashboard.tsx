@@ -82,6 +82,7 @@ export default function FamilyDashboard() {
       age: 78,
       location: 'Living Room',
       avatar: 'MJ',
+      photo: '/images (2).jfif',
       status: 'good',
       lastActive: '2 minutes ago',
       healthScore: 87,
@@ -110,6 +111,7 @@ export default function FamilyDashboard() {
       age: 82,
       location: 'Garden',
       avatar: 'RJ',
+      photo: '/images.jfif',
       status: 'warning',
       lastActive: '15 minutes ago',
       healthScore: 73,
@@ -139,6 +141,7 @@ export default function FamilyDashboard() {
       age: 75,
       location: 'Bedroom',
       avatar: 'DW',
+      photo: '/images (1).jfif',
       status: 'excellent',
       lastActive: '5 minutes ago',
       healthScore: 94,
@@ -165,6 +168,7 @@ export default function FamilyDashboard() {
       age: 84,
       location: 'Living Room',
       avatar: 'FR',
+      photo: '/download.jpg',
       status: 'critical',
       lastActive: '25 minutes ago',
       healthScore: 65,
@@ -433,12 +437,17 @@ export default function FamilyDashboard() {
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Avatar className="h-12 w-12">
-                      <AvatarImage src={`/placeholder-${member.id}.jpg`} />
-                      <AvatarFallback className="bg-primary text-primary-foreground text-sm">
-                        {member.avatar}
-                      </AvatarFallback>
-                    </Avatar>
+                    <img
+                      src={member.photo}
+                      alt={member.name}
+                      className="h-12 w-12 rounded-full object-cover border-2"
+                      style={{
+                        borderColor: member.status === 'critical' ? 'hsl(var(--health-critical))' :
+                                    member.status === 'warning' ? 'hsl(var(--warning))' :
+                                    member.status === 'excellent' ? 'hsl(var(--health-excellent))' :
+                                    'hsl(var(--health-good))'
+                      }}
+                    />
                     <div>
                       <h3 className="font-semibold">{member.name}</h3>
                       <p className="text-sm text-muted-foreground">{member.relation}, {member.age}</p>
