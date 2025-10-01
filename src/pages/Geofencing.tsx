@@ -39,14 +39,14 @@ export default function Geofencing() {
       age: 78,
       photo: '/images (2).jfif',
       location: {
-        lat: 39.7817,
-        lng: -89.6501,
+        lat: 40.7128,
+        lng: -74.0060,
         address: '123 Maple Street, Springfield, IL',
         lastUpdate: '2 min ago'
       },
       geofence: {
         radius: 500, // meters
-        center: { lat: 39.7817, lng: -89.6501 },
+        center: { lat: 40.7128, lng: -74.0060 },
         status: 'inside',
         enabled: true
       },
@@ -69,14 +69,14 @@ export default function Geofencing() {
       age: 82,
       photo: '/images.jfif',
       location: {
-        lat: 39.7825,
-        lng: -89.6485,
+        lat: 34.0522,
+        lng: -118.2437,
         address: '456 Oak Avenue, Springfield, IL',
         lastUpdate: '1 min ago'
       },
       geofence: {
         radius: 300,
-        center: { lat: 39.7820, lng: -89.6490 },
+        center: { lat: 34.0500, lng: -118.2500 },
         status: 'outside',
         enabled: true
       },
@@ -87,7 +87,7 @@ export default function Geofencing() {
         connected: true
       },
       alerts: [
-        { type: 'critical', message: 'Patient left geofenced area', time: '1 min ago' }
+        { type: 'critical', message: 'Robert Johnson Sr. has left the geofenced area - Immediate action required', time: '1 min ago' }
       ],
       sosContacts: [
         { name: 'Michael Johnson', relation: 'Son', phone: '+1 (555) 234-5678' },
@@ -101,14 +101,14 @@ export default function Geofencing() {
       age: 75,
       photo: '/images (1).jfif',
       location: {
-        lat: 39.7810,
-        lng: -89.6520,
+        lat: 41.8781,
+        lng: -87.6298,
         address: '789 Pine Road, Springfield, IL',
         lastUpdate: 'Active now'
       },
       geofence: {
         radius: 400,
-        center: { lat: 39.7810, lng: -89.6520 },
+        center: { lat: 41.8781, lng: -87.6298 },
         status: 'inside',
         enabled: true
       },
@@ -131,14 +131,14 @@ export default function Geofencing() {
       age: 84,
       photo: '/download.jpg',
       location: {
-        lat: 39.7800,
-        lng: -89.6530,
+        lat: 29.7604,
+        lng: -95.3698,
         address: '321 Elm Street, Springfield, IL',
         lastUpdate: '30 sec ago'
       },
       geofence: {
         radius: 250,
-        center: { lat: 39.7800, lng: -89.6530 },
+        center: { lat: 29.7604, lng: -95.3698 },
         status: 'inside',
         enabled: true
       },
@@ -343,18 +343,26 @@ export default function Geofencing() {
                 </div>
 
                 {/* Location Details */}
-                <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="space-y-3">
                   <div>
-                    <p className="text-muted-foreground text-xs">Coordinates</p>
-                    <p className="font-mono text-xs">
-                      {patient.location.lat.toFixed(4)}, {patient.location.lng.toFixed(4)}
+                    <p className="text-muted-foreground text-xs mb-1">Current Location</p>
+                    <p className="text-sm font-medium">
+                      {patient.location.address}
                     </p>
                   </div>
-                  <div>
-                    <p className="text-muted-foreground text-xs">Last Update</p>
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      <p className="text-xs">{patient.location.lastUpdate}</p>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <p className="text-muted-foreground text-xs">Coordinates</p>
+                      <p className="font-mono text-xs">
+                        {patient.location.lat.toFixed(4)}, {patient.location.lng.toFixed(4)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">Last Update</p>
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        <p className="text-xs">{patient.location.lastUpdate}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -397,16 +405,24 @@ export default function Geofencing() {
                   <>
                     <Separator />
                     <div className="space-y-2">
-                      <p className="text-sm font-medium text-health-critical">Active Alerts</p>
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="h-4 w-4 text-health-critical animate-pulse" />
+                        <p className="text-sm font-semibold text-health-critical">Active Alerts</p>
+                      </div>
                       {patient.alerts.map((alert, index) => (
-                        <Alert key={index} variant="destructive" className="py-2">
-                          <AlertTriangle className="h-4 w-4" />
-                          <AlertDescription className="text-xs">
-                            <div className="flex items-center justify-between">
-                              <span>{alert.message}</span>
-                              <span className="text-muted-foreground">{alert.time}</span>
+                        <Alert key={index} variant="destructive" className="py-3 border-l-4 border-l-health-critical">
+                          <div className="flex items-start gap-3">
+                            <AlertTriangle className="h-5 w-5 flex-shrink-0 animate-pulse" />
+                            <div className="flex-1 space-y-1">
+                              <AlertDescription className="text-sm font-medium leading-relaxed">
+                                {alert.message}
+                              </AlertDescription>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <Clock className="h-3 w-3" />
+                                <span>{alert.time}</span>
+                              </div>
                             </div>
-                          </AlertDescription>
+                          </div>
                         </Alert>
                       ))}
                     </div>
