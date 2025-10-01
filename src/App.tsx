@@ -12,6 +12,7 @@ import FamilyDashboard from "./pages/FamilyDashboard";
 import Emergency from "./pages/Emergency";
 import ProviderPortal from "./pages/ProviderPortal";
 import Reports from "./pages/Reports";
+import Geofencing from "./pages/Geofencing";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/emergency" element={<Emergency />} />
           <Route path="/provider-portal" element={<ProviderPortal />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/geofencing" element={<Geofencing />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -27,7 +27,9 @@ import {
   Send,
   Phone,
   Mail,
-  MessageSquare
+  MessageSquare,
+  MapPin,
+  FileText
 } from "lucide-react"
 import dashboardHero from "@/assets/dashboard-hero.jpg"
 import elderlyHome from "@/assets/elderly-home.jpg"
@@ -538,7 +540,7 @@ export default function Dashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               <Button
                 variant="outline"
                 className="h-16 flex-col gap-2"
@@ -554,6 +556,14 @@ export default function Dashboard() {
               >
                 <Users className="w-6 h-6 text-health-good" />
                 <span className="text-sm">Family Dashboard</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="h-16 flex-col gap-2 border-primary/50 hover:border-primary"
+                onClick={() => window.location.href = '/geofencing'}
+              >
+                <MapPin className="w-6 h-6 text-primary" />
+                <span className="text-sm font-semibold">Geofencing</span>
               </Button>
               <Button
                 variant="outline"

@@ -440,32 +440,49 @@ export function MultiPatientChart() {
               </CardHeader>
               <CardContent>
                 <div className="h-64 relative">
-                  <div className="absolute inset-0 flex items-end justify-between">
+                  {/* Y-axis labels */}
+                  <div className="absolute left-0 top-0 bottom-8 flex flex-col justify-between text-xs text-muted-foreground">
+                    <span>100</span>
+                    <span>80</span>
+                    <span>60</span>
+                    <span>40</span>
+                  </div>
+
+                  {/* Chart area */}
+                  <div className="absolute left-8 right-0 top-0 bottom-8 flex items-end justify-between gap-1">
                     {Array.from({ length: 12 }, (_, i) => (
                       <div key={i} className="flex flex-col items-center gap-1 flex-1">
-                        {patientsData.map((patient, patientIndex) => {
-                          const value = patient.vitals.heartRate[i] || 0
-                          const height = ((value - 60) / 40) * 100
-                          return (
-                            <div
-                              key={patientIndex}
-                              className={`w-2 rounded-t ${
-                                patient.status === 'critical' ? 'bg-health-critical' :
-                                patient.status === 'warning' ? 'bg-warning' :
-                                patient.status === 'excellent' ? 'bg-health-excellent' :
-                                'bg-health-good'
-                              }`}
-                              style={{ height: `${Math.max(5, height)}%` }}
-                              title={`${patient.name}: ${value} BPM`}
-                            />
-                          )
-                        })}
-                        <span className="text-xs text-muted-foreground">
-                          {i < 6 ? `${6-i}h` : `${i-6}h`}
+                        <div className="relative flex items-end justify-center gap-0.5 h-48 w-full">
+                          {patientsData.map((patient, patientIndex) => {
+                            const value = patient.vitals.heartRate[i] || 0
+                            const height = ((value - 50) / 60) * 100
+                            return (
+                              <div
+                                key={patientIndex}
+                                className={`rounded-t transition-all hover:opacity-80 ${
+                                  patient.status === 'critical' ? 'bg-health-critical' :
+                                  patient.status === 'warning' ? 'bg-warning' :
+                                  patient.status === 'excellent' ? 'bg-health-excellent' :
+                                  'bg-health-good'
+                                }`}
+                                style={{
+                                  height: `${Math.max(10, height)}%`,
+                                  width: '18%'
+                                }}
+                                title={`${patient.name}: ${value} BPM`}
+                              />
+                            )
+                          })}
+                        </div>
+                        <span className="text-[10px] text-muted-foreground whitespace-nowrap">
+                          {i === 0 ? 'Now' : `-${i}h`}
                         </span>
                       </div>
                     ))}
                   </div>
+
+                  {/* X-axis line */}
+                  <div className="absolute left-8 right-0 bottom-6 h-px bg-border"></div>
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-2">

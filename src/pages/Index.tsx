@@ -36,6 +36,12 @@ const Index = () => {
       description: "Predictive insights and personalized health recommendations"
     },
     {
+      icon: MapPin,
+      title: "Geofencing & GPS Tracking",
+      description: "Apple Watch location monitoring with boundary alerts and SOS notifications",
+      link: "/geofencing"
+    },
+    {
       icon: Smartphone,
       title: "Mobile & Desktop Access",
       description: "Access your health data anywhere, anytime"
@@ -182,15 +188,29 @@ const Index = () => {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="shadow-card hover:shadow-glow transition-all duration-300">
-                <CardHeader>
-                  <div className={`w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4`}>
-                    <feature.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle>{feature.title}</CardTitle>
-                  <CardDescription>{feature.description}</CardDescription>
-                </CardHeader>
-              </Card>
+              feature.link ? (
+                <Link key={index} to={feature.link}>
+                  <Card className="shadow-card hover:shadow-glow transition-all duration-300 cursor-pointer h-full">
+                    <CardHeader>
+                      <div className={`w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4`}>
+                        <feature.icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <CardTitle>{feature.title}</CardTitle>
+                      <CardDescription>{feature.description}</CardDescription>
+                    </CardHeader>
+                  </Card>
+                </Link>
+              ) : (
+                <Card key={index} className="shadow-card hover:shadow-glow transition-all duration-300">
+                  <CardHeader>
+                    <div className={`w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4`}>
+                      <feature.icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <CardTitle>{feature.title}</CardTitle>
+                    <CardDescription>{feature.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              )
             ))}
           </div>
         </div>

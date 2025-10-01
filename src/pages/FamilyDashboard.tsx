@@ -263,6 +263,10 @@ export default function FamilyDashboard() {
           </div>
 
           <div className="flex items-center gap-3">
+            <Button variant="outline" onClick={() => navigate('/geofencing')}>
+              <MapPin className="h-4 w-4 mr-2" />
+              Geofencing
+            </Button>
             <Button variant="outline" className="relative" onClick={handleAlertsClick}>
               <Bell className="h-4 w-4 mr-2" />
               Alerts
