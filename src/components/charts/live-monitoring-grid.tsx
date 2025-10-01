@@ -44,9 +44,9 @@ interface LivePatientData {
     temperature: 'up' | 'down' | 'stable'
   }
   devices: {
-    smartWatch: { connected: boolean, battery: number }
-    bloodPressureMonitor: { connected: boolean, battery: number }
-    pillDispenser: { connected: boolean, battery: number }
+    smartWatch: { connected: boolean, battery: number, image: string }
+    bloodPressureMonitor: { connected: boolean, battery: number, image: string }
+    pillDispenser: { connected: boolean, battery: number, image: string }
   }
   alerts: Array<{
     type: 'critical' | 'warning' | 'info'
@@ -89,9 +89,9 @@ export function LiveMonitoringGrid() {
         temperature: 'stable'
       },
       devices: {
-        smartWatch: { connected: true, battery: 87 },
-        bloodPressureMonitor: { connected: true, battery: 92 },
-        pillDispenser: { connected: true, battery: 78 }
+        smartWatch: { connected: true, battery: 87, image: '/Applewatch.jfif' },
+        bloodPressureMonitor: { connected: true, battery: 92, image: '/Applewatch.jfif' },
+        pillDispenser: { connected: true, battery: 78, image: '/Applewatch.jfif' }
       },
       alerts: [],
       riskScore: 15,
@@ -117,9 +117,9 @@ export function LiveMonitoringGrid() {
         temperature: 'stable'
       },
       devices: {
-        smartWatch: { connected: true, battery: 65 },
-        bloodPressureMonitor: { connected: true, battery: 43 },
-        pillDispenser: { connected: false, battery: 15 }
+        smartWatch: { connected: true, battery: 65, image: '/Applewatch.jfif' },
+        bloodPressureMonitor: { connected: true, battery: 43, image: '/Applewatch.jfif' },
+        pillDispenser: { connected: false, battery: 15, image: '/Applewatch.jfif' }
       },
       alerts: [
         { type: 'critical', message: 'Elevated heart rate detected', time: '2 min ago' },
@@ -148,9 +148,9 @@ export function LiveMonitoringGrid() {
         temperature: 'stable'
       },
       devices: {
-        smartWatch: { connected: true, battery: 91 },
-        bloodPressureMonitor: { connected: true, battery: 88 },
-        pillDispenser: { connected: true, battery: 95 }
+        smartWatch: { connected: true, battery: 91, image: '/Applewatch.jfif' },
+        bloodPressureMonitor: { connected: true, battery: 88, image: '/Applewatch.jfif' },
+        pillDispenser: { connected: true, battery: 95, image: '/Applewatch.jfif' }
       },
       alerts: [],
       riskScore: 8,
@@ -176,9 +176,9 @@ export function LiveMonitoringGrid() {
         temperature: 'up'
       },
       devices: {
-        smartWatch: { connected: true, battery: 45 },
-        bloodPressureMonitor: { connected: true, battery: 72 },
-        pillDispenser: { connected: true, battery: 23 }
+        smartWatch: { connected: true, battery: 45, image: '/Applewatch.jfif' },
+        bloodPressureMonitor: { connected: true, battery: 72, image: '/Applewatch.jfif' },
+        pillDispenser: { connected: true, battery: 23, image: '/Applewatch.jfif' }
       },
       alerts: [
         { type: 'critical', message: 'High blood pressure alert', time: '5 min ago' },
@@ -452,24 +452,51 @@ export function LiveMonitoringGrid() {
               {/* Device Status */}
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Device Status</h4>
-                <div className="grid grid-cols-3 gap-2 text-xs">
-                  <div className="flex items-center gap-1">
-                    <div className={`w-2 h-2 rounded-full ${patient.devices.smartWatch.connected ? 'bg-health-good' : 'bg-health-critical'}`} />
-                    <span>Watch</span>
-                    <Battery className="h-3 w-3" />
-                    <span>{patient.devices.smartWatch.battery}%</span>
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="flex flex-col items-center gap-1 p-2 bg-muted/30 rounded-md">
+                    <img
+                      src={patient.devices.smartWatch.image}
+                      alt="Smart Watch"
+                      className="w-10 h-10 rounded object-cover"
+                    />
+                    <div className="flex items-center gap-1">
+                      <div className={`w-1.5 h-1.5 rounded-full ${patient.devices.smartWatch.connected ? 'bg-health-good' : 'bg-health-critical'}`} />
+                      <span className="text-[10px]">Watch</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Battery className="h-3 w-3" />
+                      <span className="text-xs">{patient.devices.smartWatch.battery}%</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className={`w-2 h-2 rounded-full ${patient.devices.bloodPressureMonitor.connected ? 'bg-health-good' : 'bg-health-critical'}`} />
-                    <span>BP Mon</span>
-                    <Battery className="h-3 w-3" />
-                    <span>{patient.devices.bloodPressureMonitor.battery}%</span>
+                  <div className="flex flex-col items-center gap-1 p-2 bg-muted/30 rounded-md">
+                    <img
+                      src={patient.devices.bloodPressureMonitor.image}
+                      alt="BP Monitor"
+                      className="w-10 h-10 rounded object-cover"
+                    />
+                    <div className="flex items-center gap-1">
+                      <div className={`w-1.5 h-1.5 rounded-full ${patient.devices.bloodPressureMonitor.connected ? 'bg-health-good' : 'bg-health-critical'}`} />
+                      <span className="text-[10px]">BP Mon</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Battery className="h-3 w-3" />
+                      <span className="text-xs">{patient.devices.bloodPressureMonitor.battery}%</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className={`w-2 h-2 rounded-full ${patient.devices.pillDispenser.connected ? 'bg-health-good' : 'bg-health-critical'}`} />
-                    <span>Pills</span>
-                    <Battery className="h-3 w-3" />
-                    <span>{patient.devices.pillDispenser.battery}%</span>
+                  <div className="flex flex-col items-center gap-1 p-2 bg-muted/30 rounded-md">
+                    <img
+                      src={patient.devices.pillDispenser.image}
+                      alt="Pill Dispenser"
+                      className="w-10 h-10 rounded object-cover"
+                    />
+                    <div className="flex items-center gap-1">
+                      <div className={`w-1.5 h-1.5 rounded-full ${patient.devices.pillDispenser.connected ? 'bg-health-good' : 'bg-health-critical'}`} />
+                      <span className="text-[10px]">Pills</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Battery className="h-3 w-3" />
+                      <span className="text-xs">{patient.devices.pillDispenser.battery}%</span>
+                    </div>
                   </div>
                 </div>
               </div>

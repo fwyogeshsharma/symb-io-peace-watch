@@ -99,9 +99,9 @@ export default function FamilyDashboard() {
         { type: 'info', message: 'Medication reminder: Evening blood pressure pill due in 30 minutes', time: '30 min' }
       ],
       devices: [
-        { name: 'Smart Watch', status: 'connected', battery: 87 },
-        { name: 'Pill Dispenser', status: 'connected', battery: 92 },
-        { name: 'Sleep Monitor', status: 'connected', battery: 78 }
+        { name: 'Smart Watch', status: 'connected', battery: 87, image: '/Applewatch.jfif' },
+        { name: 'Pill Dispenser', status: 'connected', battery: 92, image: '/Applewatch.jfif' },
+        { name: 'Sleep Monitor', status: 'connected', battery: 78, image: '/Applewatch.jfif' }
       ]
     },
     {
@@ -129,9 +129,9 @@ export default function FamilyDashboard() {
         { type: 'critical', message: 'Missed morning medication - Warfarin', time: '2 hours' }
       ],
       devices: [
-        { name: 'BP Monitor', status: 'connected', battery: 65 },
-        { name: 'Fall Detector', status: 'connected', battery: 43 },
-        { name: 'GPS Tracker', status: 'connected', battery: 72 }
+        { name: 'BP Monitor', status: 'connected', battery: 65, image: '/Applewatch.jfif' },
+        { name: 'Fall Detector', status: 'connected', battery: 43, image: '/Applewatch.jfif' },
+        { name: 'GPS Tracker', status: 'connected', battery: 72, image: '/Applewatch.jfif' }
       ]
     },
     {
@@ -156,9 +156,9 @@ export default function FamilyDashboard() {
       },
       alerts: [],
       devices: [
-        { name: 'Health Band', status: 'connected', battery: 91 },
-        { name: 'Smart Scale', status: 'connected', battery: 88 },
-        { name: 'Air Quality Monitor', status: 'connected', battery: 95 }
+        { name: 'Health Band', status: 'connected', battery: 91, image: '/Applewatch.jfif' },
+        { name: 'Smart Scale', status: 'connected', battery: 88, image: '/Applewatch.jfif' },
+        { name: 'Air Quality Monitor', status: 'connected', battery: 95, image: '/Applewatch.jfif' }
       ]
     },
     {
@@ -187,9 +187,9 @@ export default function FamilyDashboard() {
         { type: 'warning', message: 'Elevated temperature: 99.1°F', time: '1 hour' }
       ],
       devices: [
-        { name: 'Heart Monitor', status: 'connected', battery: 34 },
-        { name: 'Glucose Monitor', status: 'disconnected', battery: 12 },
-        { name: 'Fall Detector', status: 'connected', battery: 67 }
+        { name: 'Heart Monitor', status: 'connected', battery: 34, image: '/Applewatch.jfif' },
+        { name: 'Glucose Monitor', status: 'disconnected', battery: 12, image: '/Applewatch.jfif' },
+        { name: 'Fall Detector', status: 'connected', battery: 67, image: '/Applewatch.jfif' }
       ]
     }
   ]
@@ -525,16 +525,26 @@ export default function FamilyDashboard() {
                 {/* Device Status */}
                 <div className="space-y-2">
                   <p className="text-sm font-medium">Connected Devices</p>
-                  <div className="grid grid-cols-1 gap-1">
+                  <div className="grid grid-cols-1 gap-2">
                     {member.devices.map((device, index) => (
-                      <div key={index} className="flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-1">
-                          <div className={`w-2 h-2 rounded-full ${device.status === 'connected' ? 'bg-health-good' : 'bg-health-critical'}`} />
-                          <span>{device.name}</span>
+                      <div key={index} className="flex items-center justify-between p-2 bg-muted/30 rounded-md">
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={device.image}
+                            alt={device.name}
+                            className="w-8 h-8 rounded object-cover"
+                          />
+                          <div className="flex flex-col">
+                            <span className="text-xs font-medium">{device.name}</span>
+                            <div className="flex items-center gap-1">
+                              <div className={`w-1.5 h-1.5 rounded-full ${device.status === 'connected' ? 'bg-health-good' : 'bg-health-critical'}`} />
+                              <span className="text-[10px] text-muted-foreground">{device.status}</span>
+                            </div>
+                          </div>
                         </div>
                         <div className="flex items-center gap-1">
                           <Battery className="h-3 w-3" />
-                          <span className={device.battery < 50 ? 'text-health-critical' : 'text-muted-foreground'}>
+                          <span className={`text-xs ${device.battery < 50 ? 'text-health-critical font-semibold' : 'text-muted-foreground'}`}>
                             {device.battery}%
                           </span>
                         </div>
