@@ -99,8 +99,8 @@ export default function FamilyDashboard() {
         { type: 'info', message: 'Medication reminder: Evening blood pressure pill due in 30 minutes', time: '30 min' }
       ],
       devices: [
-        { name: 'Smart Watch', status: 'connected', battery: 87, image: '/Applewatch.jfif' },
-        { name: 'Pill Dispenser', status: 'connected', battery: 92, image: '/Applewatch.jfif' },
+        { name: 'Apple Watch', status: 'connected', battery: 87, image: '/Applewatch.jfif' },
+        { name: 'Pill Dispenser', status: 'connected', battery: 92, image: '/one_nce.svg' },
         { name: 'Sleep Monitor', status: 'connected', battery: 78, image: '/Applewatch.jfif' }
       ]
     },
@@ -129,9 +129,9 @@ export default function FamilyDashboard() {
         { type: 'critical', message: 'Missed morning medication - Warfarin', time: '2 hours' }
       ],
       devices: [
-        { name: 'BP Monitor', status: 'connected', battery: 65, image: '/Applewatch.jfif' },
-        { name: 'Fall Detector', status: 'connected', battery: 43, image: '/Applewatch.jfif' },
-        { name: 'GPS Tracker', status: 'connected', battery: 72, image: '/Applewatch.jfif' }
+        { name: 'Garmin Watch', status: 'connected', battery: 65, image: '/garmin.jfif' },
+        { name: 'Fall Detector', status: 'connected', battery: 43, image: '/garmin.jfif' },
+        { name: 'Pill Dispenser', status: 'connected', battery: 72, image: '/one_nce.svg' }
       ]
     },
     {
@@ -156,9 +156,9 @@ export default function FamilyDashboard() {
       },
       alerts: [],
       devices: [
-        { name: 'Health Band', status: 'connected', battery: 91, image: '/Applewatch.jfif' },
-        { name: 'Smart Scale', status: 'connected', battery: 88, image: '/Applewatch.jfif' },
-        { name: 'Air Quality Monitor', status: 'connected', battery: 95, image: '/Applewatch.jfif' }
+        { name: 'Fitbit Watch', status: 'connected', battery: 91, image: '/fitbit.png' },
+        { name: 'Smart Scale', status: 'connected', battery: 88, image: '/fitbit.png' },
+        { name: 'Pill Dispenser', status: 'connected', battery: 95, image: '/one_nce.svg' }
       ]
     },
     {
@@ -187,9 +187,9 @@ export default function FamilyDashboard() {
         { type: 'warning', message: 'Elevated temperature: 99.1°F', time: '1 hour' }
       ],
       devices: [
-        { name: 'Heart Monitor', status: 'connected', battery: 34, image: '/Applewatch.jfif' },
+        { name: 'Apple Watch', status: 'connected', battery: 34, image: '/Applewatch.jfif' },
         { name: 'Glucose Monitor', status: 'disconnected', battery: 12, image: '/Applewatch.jfif' },
-        { name: 'Fall Detector', status: 'connected', battery: 67, image: '/Applewatch.jfif' }
+        { name: 'Pill Dispenser', status: 'connected', battery: 67, image: '/one_nce.svg' }
       ]
     }
   ]
@@ -536,7 +536,7 @@ export default function FamilyDashboard() {
                           <img
                             src={device.image}
                             alt={device.name}
-                            className="w-8 h-8 rounded object-cover"
+                            className={`w-8 h-8 rounded ${device.image.endsWith('.svg') ? 'object-contain p-1' : device.image.includes('garmin') ? 'object-contain scale-75' : device.image.endsWith('.png') ? 'object-contain' : 'object-cover'}`}
                           />
                           <div className="flex flex-col">
                             <span className="text-xs font-medium">{device.name}</span>

@@ -91,7 +91,7 @@ export function LiveMonitoringGrid() {
       devices: {
         smartWatch: { connected: true, battery: 87, image: '/Applewatch.jfif' },
         bloodPressureMonitor: { connected: true, battery: 92, image: '/Applewatch.jfif' },
-        pillDispenser: { connected: true, battery: 78, image: '/Applewatch.jfif' }
+        pillDispenser: { connected: true, battery: 78, image: '/one_nce.svg' }
       },
       alerts: [],
       riskScore: 15,
@@ -117,9 +117,9 @@ export function LiveMonitoringGrid() {
         temperature: 'stable'
       },
       devices: {
-        smartWatch: { connected: true, battery: 65, image: '/Applewatch.jfif' },
-        bloodPressureMonitor: { connected: true, battery: 43, image: '/Applewatch.jfif' },
-        pillDispenser: { connected: false, battery: 15, image: '/Applewatch.jfif' }
+        smartWatch: { connected: true, battery: 65, image: '/garmin.jfif' },
+        bloodPressureMonitor: { connected: true, battery: 43, image: '/garmin.jfif' },
+        pillDispenser: { connected: false, battery: 15, image: '/one_nce.svg' }
       },
       alerts: [
         { type: 'critical', message: 'Elevated heart rate detected', time: '2 min ago' },
@@ -148,9 +148,9 @@ export function LiveMonitoringGrid() {
         temperature: 'stable'
       },
       devices: {
-        smartWatch: { connected: true, battery: 91, image: '/Applewatch.jfif' },
-        bloodPressureMonitor: { connected: true, battery: 88, image: '/Applewatch.jfif' },
-        pillDispenser: { connected: true, battery: 95, image: '/Applewatch.jfif' }
+        smartWatch: { connected: true, battery: 91, image: '/fitbit.png' },
+        bloodPressureMonitor: { connected: true, battery: 88, image: '/fitbit.png' },
+        pillDispenser: { connected: true, battery: 95, image: '/one_nce.svg' }
       },
       alerts: [],
       riskScore: 8,
@@ -178,7 +178,7 @@ export function LiveMonitoringGrid() {
       devices: {
         smartWatch: { connected: true, battery: 45, image: '/Applewatch.jfif' },
         bloodPressureMonitor: { connected: true, battery: 72, image: '/Applewatch.jfif' },
-        pillDispenser: { connected: true, battery: 23, image: '/Applewatch.jfif' }
+        pillDispenser: { connected: true, battery: 23, image: '/one_nce.svg' }
       },
       alerts: [
         { type: 'critical', message: 'High blood pressure alert', time: '5 min ago' },
@@ -457,7 +457,7 @@ export function LiveMonitoringGrid() {
                     <img
                       src={patient.devices.smartWatch.image}
                       alt="Smart Watch"
-                      className="w-10 h-10 rounded object-cover"
+                      className={`w-10 h-10 rounded ${patient.devices.smartWatch.image.endsWith('.svg') ? 'object-contain p-1' : patient.devices.smartWatch.image.includes('garmin') ? 'object-contain scale-75' : patient.devices.smartWatch.image.endsWith('.png') ? 'object-contain' : 'object-cover'}`}
                     />
                     <div className="flex items-center gap-1">
                       <div className={`w-1.5 h-1.5 rounded-full ${patient.devices.smartWatch.connected ? 'bg-health-good' : 'bg-health-critical'}`} />
@@ -472,7 +472,7 @@ export function LiveMonitoringGrid() {
                     <img
                       src={patient.devices.bloodPressureMonitor.image}
                       alt="BP Monitor"
-                      className="w-10 h-10 rounded object-cover"
+                      className={`w-10 h-10 rounded ${patient.devices.bloodPressureMonitor.image.endsWith('.svg') ? 'object-contain p-1' : patient.devices.bloodPressureMonitor.image.includes('garmin') ? 'object-contain scale-75' : patient.devices.bloodPressureMonitor.image.endsWith('.png') ? 'object-contain' : 'object-cover'}`}
                     />
                     <div className="flex items-center gap-1">
                       <div className={`w-1.5 h-1.5 rounded-full ${patient.devices.bloodPressureMonitor.connected ? 'bg-health-good' : 'bg-health-critical'}`} />
@@ -487,7 +487,7 @@ export function LiveMonitoringGrid() {
                     <img
                       src={patient.devices.pillDispenser.image}
                       alt="Pill Dispenser"
-                      className="w-10 h-10 rounded object-cover"
+                      className={`w-10 h-10 rounded ${patient.devices.pillDispenser.image.endsWith('.svg') ? 'object-contain p-1' : patient.devices.pillDispenser.image.endsWith('.png') ? 'object-contain' : 'object-cover'}`}
                     />
                     <div className="flex items-center gap-1">
                       <div className={`w-1.5 h-1.5 rounded-full ${patient.devices.pillDispenser.connected ? 'bg-health-good' : 'bg-health-critical'}`} />

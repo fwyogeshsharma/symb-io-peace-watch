@@ -81,7 +81,7 @@ export default function Geofencing() {
         enabled: true
       },
       device: {
-        type: 'Apple Watch Ultra',
+        type: 'Garmin Watch',
         battery: 65,
         signal: 'medium',
         connected: true
@@ -113,7 +113,7 @@ export default function Geofencing() {
         enabled: true
       },
       device: {
-        type: 'Apple Watch SE',
+        type: 'Fitbit Watch',
         battery: 91,
         signal: 'strong',
         connected: true
@@ -366,9 +366,14 @@ export default function Geofencing() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <img
-                        src="/Applewatch.jfif"
-                        alt="Apple Watch"
-                        className="w-8 h-8 rounded object-cover"
+                        src={
+                          patient.id === 'margaret' ? '/Applewatch.jfif' :
+                          patient.id === 'robert' ? '/garmin.jfif' :
+                          patient.id === 'dorothy' ? '/fitbit.png' :
+                          '/Applewatch.jfif'
+                        }
+                        alt={patient.device.type}
+                        className={`w-8 h-8 rounded ${patient.id === 'dorothy' ? 'object-contain' : patient.id === 'robert' ? 'object-contain scale-75' : 'object-cover'}`}
                       />
                       <div>
                         <p className="text-sm font-medium">{patient.device.type}</p>

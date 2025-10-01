@@ -456,15 +456,16 @@ export function MultiPatientChart() {
                           {patientsData.map((patient, patientIndex) => {
                             const value = patient.vitals.heartRate[i] || 0
                             const height = ((value - 50) / 60) * 100
+                            const blueShades = [
+                              'bg-[#3b82f6]', // blue-500
+                              'bg-[#60a5fa]', // blue-400
+                              'bg-[#93c5fd]', // blue-300
+                              'bg-[#bfdbfe]'  // blue-200
+                            ]
                             return (
                               <div
                                 key={patientIndex}
-                                className={`rounded-t transition-all hover:opacity-80 ${
-                                  patient.status === 'critical' ? 'bg-health-critical' :
-                                  patient.status === 'warning' ? 'bg-warning' :
-                                  patient.status === 'excellent' ? 'bg-health-excellent' :
-                                  'bg-health-good'
-                                }`}
+                                className={`rounded-t transition-all hover:opacity-80 ${blueShades[patientIndex % blueShades.length]}`}
                                 style={{
                                   height: `${Math.max(10, height)}%`,
                                   width: '18%'
@@ -486,17 +487,20 @@ export function MultiPatientChart() {
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {patientsData.map((patient) => (
-                    <div key={patient.id} className="flex items-center gap-1">
-                      <div className={`w-3 h-3 rounded ${
-                        patient.status === 'critical' ? 'bg-health-critical' :
-                        patient.status === 'warning' ? 'bg-warning' :
-                        patient.status === 'excellent' ? 'bg-health-excellent' :
-                        'bg-health-good'
-                      }`} />
-                      <span className="text-xs">{patient.name}</span>
-                    </div>
-                  ))}
+                  {patientsData.map((patient, index) => {
+                    const blueShades = [
+                      'bg-[#3b82f6]', // blue-500
+                      'bg-[#60a5fa]', // blue-400
+                      'bg-[#93c5fd]', // blue-300
+                      'bg-[#bfdbfe]'  // blue-200
+                    ]
+                    return (
+                      <div key={patient.id} className="flex items-center gap-1">
+                        <div className={`w-3 h-3 rounded ${blueShades[index % blueShades.length]}`} />
+                        <span className="text-xs">{patient.name}</span>
+                      </div>
+                    )
+                  })}
                 </div>
               </CardContent>
             </Card>

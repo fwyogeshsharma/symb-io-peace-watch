@@ -79,7 +79,7 @@ export default function Dashboard() {
       name: 'Margaret Johnson',
       avatar: 'MJ',
       photo: '/images (2).jfif',
-      color: 'hsl(var(--health-good))',
+      color: '#3b82f6', // blue-500
       currentRate: 72,
       data: [65, 68, 72, 75, 70, 67, 72, 74, 71, 73, 75, 72]
     },
@@ -88,7 +88,7 @@ export default function Dashboard() {
       name: 'Robert Johnson Sr.',
       avatar: 'RJ',
       photo: '/images.jfif',
-      color: 'hsl(var(--warning))',
+      color: '#60a5fa', // blue-400
       currentRate: 78,
       data: [78, 82, 85, 79, 88, 84, 86, 89, 83, 87, 85, 78]
     },
@@ -97,7 +97,7 @@ export default function Dashboard() {
       name: 'Dorothy Williams',
       avatar: 'DW',
       photo: '/images (1).jfif',
-      color: 'hsl(var(--health-excellent))',
+      color: '#93c5fd', // blue-300
       currentRate: 68,
       data: [68, 70, 67, 69, 71, 68, 70, 69, 67, 70, 68, 68]
     },
@@ -106,7 +106,7 @@ export default function Dashboard() {
       name: 'Frank Rodriguez',
       avatar: 'FR',
       photo: '/download.jpg',
-      color: 'hsl(var(--health-critical))',
+      color: '#bfdbfe', // blue-200
       currentRate: 65,
       data: [65, 89, 92, 67, 95, 88, 91, 94, 69, 87, 85, 65]
     }
