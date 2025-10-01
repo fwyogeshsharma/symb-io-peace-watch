@@ -384,13 +384,17 @@ export default function Dashboard() {
                           return `${x},${Math.max(40, Math.min(160, y))}`
                         }).join(' ')
 
+                        // Check if patient has critical heart rate (>100 or <60)
+                        const isCritical = patient.currentRate > 100 || patient.currentRate < 60
+                        const lineColor = isCritical ? '#EF4444' : patient.color // red for critical
+
                         return (
                           <g key={patient.id}>
                             {/* Line path */}
                             <polyline
                               points={points}
                               fill="none"
-                              stroke={patient.color}
+                              stroke={lineColor}
                               strokeWidth="2"
                               className="transition-all duration-300"
                               style={{ opacity: 0.8 }}
@@ -401,6 +405,7 @@ export default function Dashboard() {
                               const x = 50 + (index * (750 / 11))
                               const y = 160 - ((value - 40) / 80) * 120
                               const isLatest = index === patient.data.length - 1
+                              const isPointCritical = value > 100 || value < 60
 
                               return (
                                 <circle
@@ -408,7 +413,7 @@ export default function Dashboard() {
                                   cx={x}
                                   cy={Math.max(40, Math.min(160, y))}
                                   r={isLatest ? "4" : "2"}
-                                  fill={patient.color}
+                                  fill={isPointCritical ? '#EF4444' : patient.color}
                                   className={`transition-all duration-300 ${isLatest ? 'animate-pulse' : ''}`}
                                   style={{ opacity: isLatest ? 1 : 0.7 }}
                                 >
@@ -422,7 +427,7 @@ export default function Dashboard() {
                               x="760"
                               y={160 - ((patient.currentRate - 40) / 80) * 120}
                               fontSize="10"
-                              fill={patient.color}
+                              fill={lineColor}
                               textAnchor="start"
                               className="font-medium"
                             >
