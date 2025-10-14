@@ -98,12 +98,14 @@ const Index = () => {
             </div>
             
             <div className="flex items-center gap-4">
-              <Link to="/dashboard">
-                <Button variant="outline">View Dashboard</Button>
+              <Link to="/login">
+                <Button variant="outline">Login</Button>
               </Link>
-              <Button className="bg-gradient-primary hover:bg-gradient-to-r hover:from-primary hover:to-primary-glow">
-                Get Started
-              </Button>
+              <Link to="/register">
+                <Button className="bg-gradient-primary hover:bg-gradient-to-r hover:from-primary hover:to-primary-glow">
+                  Get Started
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -130,15 +132,17 @@ const Index = () => {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/dashboard">
+                <Link to="/login">
                   <Button size="lg" className="bg-gradient-primary hover:bg-gradient-to-r hover:from-primary hover:to-primary-glow">
                     View Live Demo
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline">
-                  Learn More
-                </Button>
+                <Link to="/register">
+                  <Button size="lg" variant="outline">
+                    Create Account
+                  </Button>
+                </Link>
               </div>
               
               <div className="flex items-center gap-6 pt-4">
@@ -236,7 +240,7 @@ const Index = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <Link to="/dashboard">
+                <Link to="/login">
                   <Button size="lg" className="bg-white text-primary hover:bg-white/90">
                     <ArrowRight className="mr-2 h-4 w-4" />
                     Explore Dashboard

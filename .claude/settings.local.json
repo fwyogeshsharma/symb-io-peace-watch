@@ -3,7 +3,19 @@
     "allow": [
       "Bash(npm run build:*)",
       "Bash(npm run dev:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(npm install:*)",
+      "Bash(dir)",
+      "Bash(curl:*)",
+      "Bash(findstr:*)",
+      "Bash(node:*)",
+      "Bash(netstat:*)",
+      "Bash(tasklist)",
+      "Bash(timeout:*)",
+      "Bash(tasklist:*)",
+      "Bash(npm run server:*)",
+      "Bash(taskkill:*)",
+      "Read(//d/**)"
     ],
     "deny": [],
     "ask": []

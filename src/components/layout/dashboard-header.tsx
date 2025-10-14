@@ -9,9 +9,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Bell, Settings, User, LogOut, Shield, Heart, Video, Phone } from "lucide-react"
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
+import { Bell, Settings, User, LogOut, Shield, Heart, Video, Phone, Activity, Users, MapPin, AlertTriangle, Home } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/contexts/AuthContext"
 import { NotificationCenter, useNotifications } from "@/components/notifications/notification-center"
 import { VideoCallModal } from "@/components/video/video-call-modal"
 
@@ -24,6 +33,7 @@ interface DashboardHeaderProps {
 
 export function DashboardHeader({ userType, userName, notifications = 0, connectionStatus }: DashboardHeaderProps) {
   const navigate = useNavigate()
+  const { logout } = useAuth()
   const [showNotifications, setShowNotifications] = useState(false)
   const [showVideoCall, setShowVideoCall] = useState(false)
   const [selectedPatient, setSelectedPatient] = useState({
@@ -34,6 +44,11 @@ export function DashboardHeader({ userType, userName, notifications = 0, connect
     location: 'Living Room',
     status: 'good' as const
   })
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   const {
     notifications: notificationList,
@@ -56,7 +71,7 @@ export function DashboardHeader({ userType, userName, notifications = 0, connect
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
       <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
           <div
             className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => navigate('/dashboard')}
@@ -69,16 +84,127 @@ export function DashboardHeader({ userType, userName, notifications = 0, connect
               <p className="text-xs text-muted-foreground">Peace of Mind</p>
             </div>
           </div>
-          
-          <div className="flex items-center gap-2 ml-6">
+
+          <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${statusConfig[connectionStatus].color}`} />
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-muted-foreground hidden lg:inline">
               {statusConfig[connectionStatus].label}
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Navigation Menu */}
+          <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="h-9 text-sm font-semibold">
+                  Explore Care Tools
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <a
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer"
+                          onClick={() => navigate('/home')}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <Home className="h-4 w-4 text-primary" />
+                            <div className="text-sm font-medium leading-none">Home Dashboard</div>
+                          </div>
+                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                            Main dashboard with all patient information and IoT data
+                          </p>
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <a
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer"
+                          onClick={() => navigate('/analytics')}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <Activity className="h-4 w-4 text-primary" />
+                            <div className="text-sm font-medium leading-none">AI Analytics</div>
+                          </div>
+                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                            Advanced analytics with AI-powered insights and predictions
+                          </p>
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <a
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer"
+                          onClick={() => navigate('/family-dashboard')}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <Users className="h-4 w-4 text-health-good" />
+                            <div className="text-sm font-medium leading-none">Family Dashboard</div>
+                          </div>
+                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                            Multi-patient monitoring for family members and caregivers
+                          </p>
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <a
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer"
+                          onClick={() => navigate('/geofencing')}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <MapPin className="h-4 w-4 text-primary" />
+                            <div className="text-sm font-medium leading-none">Geofencing</div>
+                          </div>
+                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                            Location tracking and safe zone alerts for patient safety
+                          </p>
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <a
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer"
+                          onClick={() => navigate('/emergency')}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <AlertTriangle className="h-4 w-4 text-health-critical" />
+                            <div className="text-sm font-medium leading-none">Emergency Center</div>
+                          </div>
+                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                            Real-time emergency alerts and rapid response coordination
+                          </p>
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <a
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer"
+                          onClick={() => navigate('/provider-portal')}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <Shield className="h-4 w-4 text-success" />
+                            <div className="text-sm font-medium leading-none">Provider Portal</div>
+                          </div>
+                          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                            Healthcare provider access and medical records management
+                          </p>
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+
           {/* User Type Badge */}
           <Badge variant="outline" className="text-xs">
             {userType === 'patient' ? (
@@ -172,7 +298,7 @@ export function DashboardHeader({ userType, userName, notifications = 0, connect
                 <span>Profile</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive focus:text-destructive">
+              <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>
