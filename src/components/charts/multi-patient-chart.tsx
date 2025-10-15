@@ -45,87 +45,18 @@ interface PatientData {
   medicationAdherence: number
 }
 
-export function MultiPatientChart() {
+interface MultiPatientChartProps {
+  initialData?: PatientData[]
+  showData?: boolean
+}
+
+export function MultiPatientChart({ initialData = [], showData = false }: MultiPatientChartProps) {
   const [timeRange, setTimeRange] = useState('24h')
   const [selectedMetric, setSelectedMetric] = useState('heartRate')
   const [liveUpdate, setLiveUpdate] = useState(true)
 
-  // Multi-patient data
-  const [patientsData, setPatientsData] = useState<PatientData[]>([
-    {
-      id: 'margaret',
-      name: 'Margaret Johnson',
-      age: 78,
-      avatar: 'MJ',
-      photo: '/images (2).jfif',
-      healthScore: 87,
-      status: 'good',
-      vitals: {
-        heartRate: [72, 74, 71, 73, 75, 74, 72, 70, 73, 75, 72, 74],
-        bloodPressure: [[118, 76], [122, 78], [116, 74], [120, 77], [119, 75], [121, 78]],
-        activity: [1240, 2100, 1890, 2340, 1650, 2890, 2150, 1980, 2240, 1756, 2100, 1847],
-        temperature: [98.4, 98.6, 98.5, 98.7, 98.3, 98.6, 98.4, 98.5, 98.6, 98.4, 98.5, 98.4],
-        glucose: [142, 138, 145, 140, 143, 139, 141, 144, 138, 142, 140, 142]
-      },
-      trends: { heartRate: 'stable', bloodPressure: 'down', activity: 'up' },
-      alerts: 0,
-      medicationAdherence: 97
-    },
-    {
-      id: 'robert',
-      name: 'Robert Chen',
-      age: 82,
-      avatar: 'RC',
-      photo: '/images.jfif',
-      healthScore: 73,
-      status: 'warning',
-      vitals: {
-        heartRate: [78, 82, 85, 79, 88, 84, 86, 89, 83, 87, 85, 78],
-        bloodPressure: [[142, 89], [145, 92], [138, 87], [144, 90], [140, 88], [142, 89]],
-        activity: [892, 1100, 756, 980, 834, 1200, 945, 723, 856, 934, 812, 892],
-        temperature: [98.7, 98.9, 98.6, 98.8, 98.7, 98.9, 98.6, 98.7, 98.8, 98.6, 98.7, 98.7]
-      },
-      trends: { heartRate: 'up', bloodPressure: 'up', activity: 'down' },
-      alerts: 3,
-      medicationAdherence: 89
-    },
-    {
-      id: 'dorothy',
-      name: 'Dorothy Williams',
-      age: 75,
-      avatar: 'DW',
-      photo: '/images (1).jfif',
-      healthScore: 94,
-      status: 'excellent',
-      vitals: {
-        heartRate: [68, 70, 67, 69, 71, 68, 70, 69, 67, 70, 68, 68],
-        bloodPressure: [[115, 72], [118, 74], [112, 70], [116, 73], [114, 71], [115, 72]],
-        activity: [2341, 2890, 3100, 2756, 2980, 3200, 2845, 3056, 2734, 2890, 2567, 2341],
-        temperature: [98.2, 98.4, 98.1, 98.3, 98.2, 98.4, 98.1, 98.2, 98.3, 98.1, 98.2, 98.2]
-      },
-      trends: { heartRate: 'stable', bloodPressure: 'stable', activity: 'up' },
-      alerts: 0,
-      medicationAdherence: 92
-    },
-    {
-      id: 'frank',
-      name: 'Frank Rodriguez',
-      age: 84,
-      avatar: 'FR',
-      photo: '/download.jpg',
-      healthScore: 65,
-      status: 'critical',
-      vitals: {
-        heartRate: [65, 89, 92, 67, 95, 88, 91, 94, 69, 87, 85, 65],
-        bloodPressure: [[158, 95], [162, 98], [155, 93], [160, 96], [157, 94], [158, 95]],
-        activity: [456, 678, 345, 567, 423, 789, 534, 612, 398, 534, 467, 456],
-        temperature: [99.1, 99.3, 98.9, 99.2, 99.1, 99.4, 98.8, 99.1, 99.2, 98.9, 99.0, 99.1]
-      },
-      trends: { heartRate: 'up', bloodPressure: 'up', activity: 'down' },
-      alerts: 5,
-      medicationAdherence: 76
-    }
-  ])
+  // Multi-patient data - use empty array if showData is false or use provided initialData
+  const [patientsData, setPatientsData] = useState<PatientData[]>(showData && initialData.length > 0 ? initialData : [])
 
   // Real-time data simulation
   useEffect(() => {
@@ -218,6 +149,32 @@ export function MultiPatientChart() {
       warning: patientsData.filter(p => p.status === 'warning').length,
       critical: patientsData.filter(p => p.status === 'critical').length
     }
+  }
+
+  // Show empty state if no data
+  if (!showData || patientsData.length === 0) {
+    return (
+      <Card className="shadow-card border-l-4 border-l-primary">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 text-primary" />
+            Multi-Patient Health Analytics
+          </CardTitle>
+          <CardDescription>
+            Real-time monitoring across your entire patient portfolio
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-12">
+            <BarChart3 className="h-16 w-16 mx-auto mb-4 opacity-30" />
+            <p className="text-lg font-medium mb-2">No Patient Data Available</p>
+            <p className="text-sm text-muted-foreground mb-6">
+              Generate sample data to see live multi-patient analytics and monitoring.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (

@@ -74,7 +74,7 @@ export function DashboardHeader({ userType, userName, notifications = 0, connect
         <div className="flex items-center gap-6">
           <div
             className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/home')}
           >
             <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-primary">
               <Heart className="h-5 w-5 text-white" />

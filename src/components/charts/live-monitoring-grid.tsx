@@ -57,7 +57,12 @@ interface LivePatientData {
   status: 'excellent' | 'good' | 'warning' | 'critical'
 }
 
-export function LiveMonitoringGrid() {
+interface LiveMonitoringGridProps {
+  initialData?: LivePatientData[]
+  showData?: boolean
+}
+
+export function LiveMonitoringGrid({ initialData = [], showData = false }: LiveMonitoringGridProps) {
   const [isLive, setIsLive] = useState(true)
   const [showVideoCall, setShowVideoCall] = useState(false)
   const [selectedPatient, setSelectedPatient] = useState<{
@@ -68,127 +73,7 @@ export function LiveMonitoringGrid() {
     location: string
     status: 'excellent' | 'good' | 'warning' | 'critical'
   } | null>(null)
-  const [patients, setPatients] = useState<LivePatientData[]>([
-    {
-      id: 'margaret',
-      name: 'Margaret Johnson',
-      avatar: 'MJ',
-      photo: '/images (2).jfif',
-      location: 'Living Room',
-      lastSeen: 'Active now',
-      vitals: {
-        heartRate: 72,
-        bloodPressure: [118, 76],
-        temperature: 98.4,
-        oxygenSat: 98,
-        activity: 1847
-      },
-      trends: {
-        heartRate: 'stable',
-        bloodPressure: 'down',
-        temperature: 'stable'
-      },
-      devices: {
-        smartWatch: { connected: true, battery: 87, image: '/Applewatch.jfif' },
-        bloodPressureMonitor: { connected: true, battery: 92, image: '/Applewatch.jfif' },
-        pillDispenser: { connected: true, battery: 78, image: '/one_nce.svg' }
-      },
-      alerts: [],
-      riskScore: 15,
-      status: 'good'
-    },
-    {
-      id: 'robert',
-      name: 'Robert Chen',
-      avatar: 'RC',
-      photo: '/images.jfif',
-      location: 'Garden',
-      lastSeen: '5 min ago',
-      vitals: {
-        heartRate: 89,
-        bloodPressure: [142, 89],
-        temperature: 98.7,
-        oxygenSat: 96,
-        activity: 892
-      },
-      trends: {
-        heartRate: 'up',
-        bloodPressure: 'up',
-        temperature: 'stable'
-      },
-      devices: {
-        smartWatch: { connected: true, battery: 65, image: '/garmin.jfif' },
-        bloodPressureMonitor: { connected: true, battery: 43, image: '/garmin.jfif' },
-        pillDispenser: { connected: false, battery: 15, image: '/one_nce.svg' }
-      },
-      alerts: [
-        { type: 'critical', message: 'Elevated heart rate detected', time: '2 min ago' },
-        { type: 'warning', message: 'Missed morning medication', time: '1 hour ago' }
-      ],
-      riskScore: 75,
-      status: 'warning'
-    },
-    {
-      id: 'dorothy',
-      name: 'Dorothy Williams',
-      avatar: 'DW',
-      photo: '/images (1).jfif',
-      location: 'Bedroom',
-      lastSeen: '1 min ago',
-      vitals: {
-        heartRate: 68,
-        bloodPressure: [115, 72],
-        temperature: 98.2,
-        oxygenSat: 99,
-        activity: 2341
-      },
-      trends: {
-        heartRate: 'stable',
-        bloodPressure: 'stable',
-        temperature: 'stable'
-      },
-      devices: {
-        smartWatch: { connected: true, battery: 91, image: '/fitbit.png' },
-        bloodPressureMonitor: { connected: true, battery: 88, image: '/fitbit.png' },
-        pillDispenser: { connected: true, battery: 95, image: '/one_nce.svg' }
-      },
-      alerts: [],
-      riskScore: 8,
-      status: 'excellent'
-    },
-    {
-      id: 'frank',
-      name: 'Frank Rodriguez',
-      avatar: 'FR',
-      photo: '/download.jpg',
-      location: 'Kitchen',
-      lastSeen: 'Active now',
-      vitals: {
-        heartRate: 95,
-        bloodPressure: [158, 95],
-        temperature: 99.1,
-        oxygenSat: 94,
-        activity: 456
-      },
-      trends: {
-        heartRate: 'up',
-        bloodPressure: 'up',
-        temperature: 'up'
-      },
-      devices: {
-        smartWatch: { connected: true, battery: 45, image: '/Applewatch.jfif' },
-        bloodPressureMonitor: { connected: true, battery: 72, image: '/Applewatch.jfif' },
-        pillDispenser: { connected: true, battery: 23, image: '/one_nce.svg' }
-      },
-      alerts: [
-        { type: 'critical', message: 'High blood pressure alert', time: '5 min ago' },
-        { type: 'critical', message: 'Elevated temperature detected', time: '8 min ago' },
-        { type: 'warning', message: 'Low activity level', time: '15 min ago' }
-      ],
-      riskScore: 92,
-      status: 'critical'
-    }
-  ])
+  const [patients, setPatients] = useState<LivePatientData[]>(showData && initialData.length > 0 ? initialData : [])
 
   // Simulate real-time updates
   useEffect(() => {
@@ -267,6 +152,32 @@ export function LiveMonitoringGrid() {
       case 'normal': return 'text-health-good'
       default: return 'text-muted-foreground'
     }
+  }
+
+  // Show empty state if no data
+  if (!showData || patients.length === 0) {
+    return (
+      <Card className="shadow-card border-l-4 border-l-primary">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Eye className="h-5 w-5 text-primary" />
+            Live Patient Monitoring
+          </CardTitle>
+          <CardDescription>
+            Real-time vital signs and activity monitoring across all patients
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-12">
+            <Eye className="h-16 w-16 mx-auto mb-4 opacity-30" />
+            <p className="text-lg font-medium mb-2">No Live Monitoring Data Available</p>
+            <p className="text-sm text-muted-foreground mb-6">
+              Generate sample data to see live patient monitoring with real-time vital signs.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (

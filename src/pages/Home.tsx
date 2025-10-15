@@ -56,6 +56,9 @@ import {
   sampleDataApi,
   dashboardApi
 } from '@/lib/api-client';
+import { MultiPatientChart } from '@/components/charts/multi-patient-chart';
+import { LiveMonitoringGrid } from '@/components/charts/live-monitoring-grid';
+import { PatientDetailDashboard } from '@/components/dashboard/patient-detail-dashboard';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 
@@ -72,6 +75,8 @@ export default function Home() {
   const [availablePatients, setAvailablePatients] = useState<any[]>([]);
   const [showBrowseModal, setShowBrowseModal] = useState(false);
   const [pendingRequests, setPendingRequests] = useState<any[]>([]);
+  const [showPatientDetail, setShowPatientDetail] = useState(false);
+  const [selectedPatientDetail, setSelectedPatientDetail] = useState<{ id: number; name: string } | null>(null);
 
   // IoT Data State
   const [iotDevices, setIotDevices] = useState<any[]>([]);
@@ -453,7 +458,9 @@ export default function Home() {
                           ? 'border-2 border-primary bg-primary/5'
                           : 'border hover:border-primary/50'
                       }`}
-                      onClick={() => setSelectedSeniorId(senior.id)}
+                      onClick={() => {
+                        setSelectedSeniorId(senior.id)
+                      }}
                     >
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-3">
@@ -470,19 +477,34 @@ export default function Home() {
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <div className="space-y-1 text-sm">
-                          {senior.address && (
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                              <MapPin className="h-3 w-3" />
-                              <span className="truncate">{senior.address}</span>
-                            </div>
-                          )}
-                          {senior.emergency_contact && (
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                              <Phone className="h-3 w-3" />
-                              <span>{senior.emergency_contact}</span>
-                            </div>
-                          )}
+                        <div className="space-y-3">
+                          <div className="space-y-1 text-sm">
+                            {senior.address && (
+                              <div className="flex items-center gap-2 text-muted-foreground">
+                                <MapPin className="h-3 w-3" />
+                                <span className="truncate">{senior.address}</span>
+                              </div>
+                            )}
+                            {senior.emergency_contact && (
+                              <div className="flex items-center gap-2 text-muted-foreground">
+                                <Phone className="h-3 w-3" />
+                                <span>{senior.emergency_contact}</span>
+                              </div>
+                            )}
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setSelectedPatientDetail({ id: senior.id, name: senior.full_name })
+                              setShowPatientDetail(true)
+                            }}
+                          >
+                            <User className="h-3 w-3 mr-2" />
+                            View Full Dashboard
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
@@ -558,6 +580,21 @@ export default function Home() {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Live Monitoring Components for Caregivers */}
+        {(user?.role === 'caregiver' || user?.role === 'provider') && selectedSeniorId && (
+          <>
+            {/* Multi-Patient Analytics */}
+            <MultiPatientChart
+              showData={latestVitals.length > 0 || todayActivities.length > 0}
+            />
+
+            {/* Live Monitoring Grid */}
+            <LiveMonitoringGrid
+              showData={latestVitals.length > 0 || todayActivities.length > 0}
+            />
+          </>
         )}
 
         {/* Browse Patients Modal */}
@@ -1324,6 +1361,19 @@ export default function Home() {
           </div>
         </div>
       </main>
+
+      {/* Patient Detail Dashboard Modal */}
+      {selectedPatientDetail && (
+        <PatientDetailDashboard
+          patientId={selectedPatientDetail.id}
+          patientName={selectedPatientDetail.name}
+          isOpen={showPatientDetail}
+          onClose={() => {
+            setShowPatientDetail(false)
+            setSelectedPatientDetail(null)
+          }}
+        />
+      )}
     </div>
   );
 }
